@@ -1,0 +1,5 @@
+Title: Associate Technical Product Manager
+Company: Keelhaven Freightworks
+Location: Seattle, WA
+
+Keelhaven Freightworks runs a network of depots and software that plans the routes between them. We are hiring for the Associate Technical Product Manager role on a team of about twelve people. You will define success metrics and review them with engineering and design. You will run launches from first draft to the first month of usage data. You will weigh tradeoffs between scope, cost and timing and explain your choices. You have up to 2 years of experience, and we expect to teach you the rest. A technical background is expected, and you can read code or write simple queries. This role is fully onsite at our Seattle office. We are unable to sponsor work visas for this position. We review applications on a rolling basis.

@@ -1,0 +1,5 @@
+Title: Product Manager, Data
+Company: Hollowell Goods
+Location: Chicago, IL
+
+At Hollowell Goods, a small team looks after the whole path from search to delivery. This Product Manager, Data position reports to a director and works with several teams. You will define success metrics and review them with engineering and design. You will run launches from first draft to the first month of usage data. You have 3 to 5 years of experience in a similar role. You are comfortable with data pipelines, dashboards and experiments. The team works from our Chicago office three days a week and remotely the rest. Our benefits include health coverage and a learning budget. The interview process has three short conversations.

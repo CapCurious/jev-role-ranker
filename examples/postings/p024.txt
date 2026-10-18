@@ -1,0 +1,5 @@
+Title: Technical Product Manager
+Company: Solstice Grid
+Location: London, United Kingdom
+
+Solstice Grid installs and monitors storage systems for commercial buildings. We are looking for a Technical Product Manager to join a team that is growing this year. You will run launches from first draft to the first month of usage data. You will interview customers every week and turn what you hear into priorities. You bring 4 years of experience and have shipped work end to end. You will work daily with engineers on APIs, data models and system tradeoffs. Graduate business training is a plus. The team works from our London office three days a week and remotely the rest. We are unable to sponsor work visas for this position. Send us a short note about a project you are proud of.

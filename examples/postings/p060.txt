@@ -1,0 +1,5 @@
+Title: Software Engineer
+Company: Larkspur Academy
+Location: Singapore, Singapore
+
+Larkspur Academy builds learning software used in classrooms every day. We are hiring for the Software Engineer role on a team of about twelve people. You will improve the processes your team uses and document what you change. You will track a handful of numbers that tell the team how the work is going. You will work with colleagues in several departments to keep projects moving. You have 0 to 2 years of relevant experience, and recent graduates are welcome. A technical background is expected, and you can read code or write simple queries. We hire MBA graduates for this role every year. The team works from our Singapore office three days a week and remotely the rest. Send us a short note about a project you are proud of.

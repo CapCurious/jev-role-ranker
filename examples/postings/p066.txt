@@ -1,0 +1,5 @@
+Title: Product Manager, Data
+Company: Orchard Analytics
+Location: Atlanta, GA
+
+Orchard Analytics sells workflow software to teams that outgrew their spreadsheets. We are looking for a Product Manager, Data to join a team that is growing this year. You will weigh tradeoffs between scope, cost and timing and explain your choices. You will define success metrics and review them with engineering and design. You will set the roadmap, write clear specs and decide what ships next. You bring 4 years of experience and have shipped work end to end. A technical background is expected, and you can read code or write simple queries. This role is fully onsite at our Atlanta office. Our benefits include health coverage and a learning budget. The interview process has three short conversations.

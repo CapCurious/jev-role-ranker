@@ -1,0 +1,5 @@
+Title: Software Engineer
+Company: Ironleaf Robotics
+Location: Boston, MA
+
+Ironleaf Robotics builds robots that move boxes, scan shelves and inspect equipment in busy facilities. This Software Engineer position reports to a director and works with several teams. You will work with colleagues in several departments to keep projects moving. You will prepare summaries for leadership and flag risks early. You will track a handful of numbers that tell the team how the work is going. You have 3 to 5 years of experience in a similar role. You are comfortable with data pipelines, dashboards and experiments. We hire MBA graduates for this role every year. This role is fully onsite at our Boston office. We have supported work visas for new hires before and are glad to do it again.

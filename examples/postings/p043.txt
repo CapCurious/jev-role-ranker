@@ -1,0 +1,5 @@
+Title: Senior Product Manager, Data
+Company: Ironleaf Robotics
+Location: London, United Kingdom
+
+At Ironleaf Robotics, small teams ship hardware and software together on a weekly rhythm. This Senior Product Manager, Data position reports to a director and works with several teams. You will run launches from first draft to the first month of usage data. You will interview customers every week and turn what you hear into priorities. You will weigh tradeoffs between scope, cost and timing and explain your choices. You have 8 or more years of experience and have led a team before. You are comfortable with data pipelines, dashboards and experiments. Graduate business training is a plus. The team works from our London office three days a week and remotely the rest. Our benefits include health coverage and a learning budget.

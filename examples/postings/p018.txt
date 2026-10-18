@@ -1,0 +1,5 @@
+Title: Product Manager, Platform
+Company: Pennywhistle Schools
+Location: San Francisco, CA
+
+Pennywhistle Schools offers tutoring and course tools to schools that want better outcomes. We are hiring for the Product Manager, Platform role on a team of about twelve people. You will interview customers every week and turn what you hear into priorities. You will define success metrics and review them with engineering and design. You will weigh tradeoffs between scope, cost and timing and explain your choices. You bring 4 years of experience and have shipped work end to end. You are comfortable with data pipelines, dashboards and experiments. The team works from our San Francisco office three days a week and remotely the rest. We are unable to sponsor work visas for this position. Send us a short note about a project you are proud of.

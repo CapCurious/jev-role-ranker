@@ -1,0 +1,5 @@
+Title: Associate Product Manager, Platform
+Company: Solstice Grid
+Location: Chicago, IL
+
+Solstice Grid helps utilities forecast demand and balance supply from many small sources. We are looking for a Associate Product Manager, Platform to join a team that is growing this year. You will set the roadmap, write clear specs and decide what ships next. You will weigh tradeoffs between scope, cost and timing and explain your choices. You will define success metrics and review them with engineering and design. You have up to 2 years of experience, and we expect to teach you the rest. A technical background is expected, and you can read code or write simple queries. We hire MBA graduates for this role every year. This role is fully onsite at our Chicago office. Our benefits include health coverage and a learning budget.

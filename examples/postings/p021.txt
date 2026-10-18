@@ -1,0 +1,5 @@
+Title: Technical Product Manager
+Company: Aspenfield Power
+Location: Remote (United States)
+
+At Aspenfield Power, the work is practical and the customers are cities, schools and factories. We are looking for a Technical Product Manager to join a team that is growing this year. You will set the roadmap, write clear specs and decide what ships next. You will define success metrics and review them with engineering and design. You will interview customers every week and turn what you hear into priorities. You bring 4 years of experience and have shipped work end to end. You are comfortable with data pipelines, dashboards and experiments. This is a fully remote role for candidates based in the United States. We are unable to sponsor work visas for this position. We review applications on a rolling basis.

@@ -1,0 +1,5 @@
+Title: Product Manager
+Company: Marlow Therapeutics
+Location: San Francisco, CA
+
+Marlow Therapeutics makes tools that connect patients with the right clinician faster. We are looking for a Product Manager to join a team that is growing this year. You will set the roadmap, write clear specs and decide what ships next. You will weigh tradeoffs between scope, cost and timing and explain your choices. You have up to 2 years of experience, and we expect to teach you the rest. You will work daily with engineers on APIs, data models and system tradeoffs. This role is fully onsite at our San Francisco office. This position does not offer visa sponsorship of any kind. The interview process has three short conversations.

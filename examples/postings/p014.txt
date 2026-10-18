@@ -1,0 +1,5 @@
+Title: Technical Product Manager
+Company: Tessel Machines
+Location: Austin, TX
+
+Tessel Machines builds robots that move boxes, scan shelves and inspect equipment in busy facilities. We are looking for a Technical Product Manager to join a team that is growing this year. You will set the roadmap, write clear specs and decide what ships next. You will interview customers every week and turn what you hear into priorities. You bring 4 years of experience and have shipped work end to end. A technical background is expected, and you can read code or write simple queries. An MBA or equivalent graduate degree is welcome but not required. This role is fully onsite at our Austin office. Only permanent residents and citizens may apply. Send us a short note about a project you are proud of.

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-role-ranker"
+version = "0.1.0"
+description = "Rank job postings against a reader profile with four typed Jev questions per posting"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[project.scripts]
+jev-role-ranker = "jev_role_ranker:main"
+
+[tool.setuptools]
+py-modules = ["jev_role_ranker", "jev_client"]

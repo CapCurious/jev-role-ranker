@@ -1,0 +1,5 @@
+Title: Technical Product Manager
+Company: Orchard Analytics
+Location: Denver, CO
+
+Orchard Analytics offers a data platform that small companies use to understand their customers. This Technical Product Manager position reports to a director and works with several teams. You will set the roadmap, write clear specs and decide what ships next. You will interview customers every week and turn what you hear into priorities. You will run launches from first draft to the first month of usage data. You bring 4 years of experience and have shipped work end to end. You will work daily with engineers on APIs, data models and system tradeoffs. Graduate business training is a plus. The team works from our Denver office three days a week and remotely the rest. We review applications on a rolling basis.

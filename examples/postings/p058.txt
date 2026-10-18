@@ -1,0 +1,5 @@
+Title: Operations Manager
+Company: Redwood Freight
+Location: San Francisco, CA
+
+Redwood Freight runs a network of depots and software that plans the routes between them. This Operations Manager position reports to a director and works with several teams. You will improve the processes your team uses and document what you change. You will prepare summaries for leadership and flag risks early. You will manage relationships with customers and partners over the long term. You bring 4 years of experience and have shipped work end to end. You are comfortable with data pipelines, dashboards and experiments. This role is fully onsite at our San Francisco office. The interview process has three short conversations.

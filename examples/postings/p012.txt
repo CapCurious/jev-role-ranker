@@ -1,0 +1,5 @@
+Title: Senior Data Analyst
+Company: Northwind Robotics
+Location: Chicago, IL
+
+At Northwind Robotics, small teams ship hardware and software together on a weekly rhythm. This Senior Data Analyst position reports to a director and works with several teams. You will track a handful of numbers that tell the team how the work is going. You will prepare summaries for leadership and flag risks early. You have 8 or more years of experience and have led a team before. A technical background is expected, and you can read code or write simple queries. This role is fully onsite at our Chicago office. We welcome applicants from every background. The interview process has three short conversations.
