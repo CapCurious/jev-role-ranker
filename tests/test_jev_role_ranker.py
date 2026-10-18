@@ -10,6 +10,8 @@ import shutil
 import sys
 import tempfile
 import unittest
+import urllib.error
+from unittest import mock
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -164,6 +166,52 @@ class InputTests(unittest.TestCase):
 
 
 class DemoTests(unittest.TestCase):
+    def test_demo_without_subcommand_runs_rank(self):
+        code, out = run_cli(["--demo"])
+        self.assertEqual(code, 0)
+        self.assertEqual(out.splitlines()[0], jev_client.DEMO_LABEL)
+
+    def test_demo_rejects_unrecorded_posting(self):
+        with tempfile.TemporaryDirectory() as d:
+            with open(os.path.join(d, "unknown.txt"), "w", encoding="utf-8") as fh:
+                fh.write("Title: Unrecorded role\n\nA posting absent from the demo recordings.")
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                code = rr.main(["--demo", "rank", d])
+        self.assertEqual(code, 2)
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertEqual(stderr.getvalue(), "error: no recorded answer for this input; demo mode "
+                         "replays the bundled examples only, run live with a key\n")
+
+    def test_auth_error_aborts_rank_once(self):
+        error = urllib.error.HTTPError(rr.jev_client.API_URL, 401, "Unauthorized", {}, io.BytesIO())
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with mock.patch.dict(os.environ, {"JEV_API_KEY": "bad"}, clear=True), \
+                mock.patch("urllib.request.urlopen", side_effect=error), \
+                contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            code = rr.main(["rank", os.path.join(ROOT, "examples", "postings")])
+        self.assertEqual(code, 2)
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertEqual(len(stderr.getvalue().splitlines()), 1)
+        self.assertIn("JEV_API_KEY", stderr.getvalue())
+        self.assertIn("console.typesafe.ai/keys", stderr.getvalue())
+        self.assertNotIn("Traceback", stderr.getvalue())
+
+    def test_all_postings_fail_with_first_cause(self):
+        class Broken(object):
+            total_calls = total_input_tokens = 0
+            total_cost_usd = 0.0
+
+            def ask(self, state, questions):
+                raise jev_client.JevError("connection refused")
+
+        stderr = io.StringIO()
+        with mock.patch.object(rr, "make_client", return_value=Broken()), \
+                contextlib.redirect_stderr(stderr):
+            code, _ = run_cli(["rank", os.path.join(ROOT, "examples", "postings")])
+        self.assertNotEqual(code, 0)
+        self.assertIn("connection refused", stderr.getvalue())
+
     def test_demo_prints_label_and_80_rows(self):
         code, out = run_cli(["--demo", "rank"])
         self.assertEqual(code, 0)

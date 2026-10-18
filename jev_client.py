@@ -126,13 +126,6 @@ class LiveClient(_Counters):
         self._warned = False
 
     def ask(self, state, questions):
-        if not self._warned and not any(ch.isdigit() for ch in self.model):
-            self._warned = True
-            warnings.warn(
-                "model {!r} is an alias and can change under you; pin a versioned id "
-                "such as jev-1.13.0 for reproducible results".format(self.model),
-                stacklevel=2,
-            )
         key = self._key or get_key()
         body = {"state": minimize(state), "model": self.model, "questions": questions}
         req = urllib.request.Request(
@@ -150,12 +143,24 @@ class LiveClient(_Counters):
                 text = exc.read().decode("utf-8", "replace")
             except Exception:
                 text = ""
+            if exc.code in (401, 403):
+                raise JevError(
+                    "Jev rejected the API key (HTTP {}). Check JEV_API_KEY "
+                    "(or TYPESAFE_API_KEY) at https://console.typesafe.ai/keys".format(exc.code),
+                    status=exc.code, body=text)
             raise JevError("HTTP {} from Jev API".format(exc.code), status=exc.code, body=text)
         except urllib.error.URLError as exc:
             raise JevError("Jev API unreachable: {}".format(exc.reason))
         except OSError as exc:
             raise JevError("Jev API call failed or timed out: {}".format(exc))
         latency = time.time() - started
+        if not self._warned and not any(ch.isdigit() for ch in self.model):
+            self._warned = True
+            warnings.warn(
+                "model {!r} is an alias and can change under you; pin a versioned id "
+                "such as jev-1.13.0 for reproducible results".format(self.model),
+                stacklevel=2,
+            )
         try:
             out = json.loads(raw)
             answers = out["answers"]
@@ -184,11 +189,14 @@ class RecordedClient(_Counters):
                 "no recorded response for question ids {}".format(sorted(ids))
             )
         want = self._canon(state)
-        chosen = matching[0]
+        chosen = None
         for rec in matching:
             if self._canon(rec.get("state")) == want:
                 chosen = rec
                 break
+        if chosen is None:
+            raise JevError("no recorded answer for this input; demo mode replays the bundled "
+                           "examples only, run live with a key")
         usage = chosen.get("usage") or {}
         self._record(usage, 0.0)
         return chosen["answers"], usage

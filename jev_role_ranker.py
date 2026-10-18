@@ -251,6 +251,8 @@ def score_posting(client, profile, posting):
             answers, usage = client.ask(state, QUESTIONS)
             return {"answers": answers, "usage": usage, "error": None}
         except jev_client.JevError as exc:
+            if exc.status in (401, 403) or isinstance(client, jev_client.RecordedClient):
+                raise
             last = exc
     return {"answers": None, "usage": {}, "error": str(last)}
 
@@ -440,10 +442,14 @@ def run(args, out=None):
         return 2
     if args.record and not args.demo:
         client = RecordingClient(client, args.record, args.model)
+    try:
+        results = [score_posting(client, profile, p) for p in postings]
+    except jev_client.JevError as exc:
+        print("error: {}".format(exc), file=sys.stderr)
+        return 2
+    rows = sort_rows(build_rows(postings, results, weights), args.sort)
     if args.demo:
         print(jev_client.DEMO_LABEL, file=out)
-    results = [score_posting(client, profile, p) for p in postings]
-    rows = sort_rows(build_rows(postings, results, weights), args.sort)
     if args.command == "explain":
         print(format_explain(rows, args.limit), file=out)
     else:
@@ -454,7 +460,12 @@ def run(args, out=None):
         client.save()
     failed = sum(1 for r in rows if r["error"])
     if failed:
-        print("{} posting(s) failed and are listed last with flag ERROR".format(failed), file=sys.stderr)
+        message = "{} posting(s) failed and are listed last with flag ERROR".format(failed)
+        if failed == len(rows):
+            message += ": {}".format(rows[0]["error"])
+        print(message, file=sys.stderr)
+        if failed == len(rows):
+            return 1
     return 0
 
 
@@ -462,6 +473,10 @@ def main(argv=None):
     parser = build_parser()
     args = parser.parse_args(argv)
     if not args.command:
+        if args.demo:
+            args.command = "rank"
+            args.input = None
+            return run(args)
         parser.print_help()
         return 0
     return run(args)

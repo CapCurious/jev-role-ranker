@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased, 2026-10-18 (iteration 1 of the quality loop)
+
+- README cut from 1,620 to about 1,090 words: framed as rank plus flag, never reject; the hero shows the default `--demo rank` output in descending score; cost per 1,000 and 100,000 postings and a "nothing to host" line; a Limits bullet on live score drift of about 0.02 between identical runs; the Jev section is shared word for word with the sibling kits.
+- jev_client: HTTP 401 or 403 raises one clear line naming JEV_API_KEY and the console URL; `rank` and `explain` stop on the first auth error with exit 2.
+- `rank` exits 1 and names the first cause when every posting fails; `--demo` with no subcommand runs `rank`.
+- Demo mode no longer answers a posting that has no recording; it exits 2 with one line and no table.
+- Explainer: a "Repo on GitHub" link in the rail; the localhost line in this file replaced by the live page.
+- Gate: tests `OK (skipped=1)`, demo byte-identical, privacy grep all classes zero except the public origin remote, leakage scan 0 findings, scorecard 14 of 15 on the working tree.
+
 ## v5 (2026-10-18)
 
 Docs glosses from cold reads. No code changed. "System One" does not appear in this README, so that gloss was skipped.
@@ -78,7 +87,7 @@ Gates (run 2026-10-18)
 - em dash count: 0 (every text file in the kit)
 - docs/index.html: 25,022 bytes (limit 150 KB)
 - docs/demo.gif: 192,456 bytes (limit 2 MB), 12.76 s (limit 25 s); text checked legible on extracted frames at 5 s and 12 s
-- console: built-in browser on http://localhost:8765/index.html at 1280 light, 1280 dark and 375 mobile, no console messages and no errors; no horizontal page scroll at 375
+- console: built-in browser on the live page at https://capcurious.github.io/jev-role-ranker/ at 1280 light, 1280 dark and 375 mobile, no console messages and no errors; no horizontal page scroll at 375
 - skill trigger test, a small model via `claude -p`, one call per phrase, 60 s timeout: "rank these postings" yes; "which of these jobs fit" yes; "flag sponsorship risk in these roles" yes; decoy "summarize this PDF" no; decoy "write a cover letter" no (5 of 5 as intended)
 
 ## v1 (2026-10-18)
