@@ -6,12 +6,12 @@ Measured: Spearman 0.863 against the gold rank on synthetic postings (n=80, 2026
 ### Quickstart (60 seconds)
 ```
 git clone https://github.com/CapCurious/jev-role-ranker && cd jev-role-ranker
-python3 jev_role_ranker.py --demo
+python3 jev_role_ranker.py --demo          # no key, offline
 python3 jev_role_ranker.py --model jev-1.13.0 rank examples/postings --limit 10   # live: export JEV_API_KEY=YOUR_KEY first
 ```
 ## Cost and hosting
 
-On jev-1.13.0 at the published $0.042 per million input tokens (one four-question call: about 0.2 seconds, $0.00003), ranking 1,000 postings costs about $0.033 and about 3.3 minutes serial on the fixture postings, about $0.088 on real postings at the 6,000-character cap; 100,000 cost about $3.30 to $8.80 and about 5.5 hours serial; demo mode is free and offline; live mode sends each posting's text to TypeSafe.
+Cost, measured 2026-10-18 on jev-1.13.0 at the published $0.042 per million input tokens: one four-question call takes about 0.2 seconds and $0.00003, so 1,000 postings cost about $0.033 and 3.3 minutes serial on the fixture postings, about $0.088 on real postings at the 6,000-character cap; 100,000 cost about $3.30 to $8.80 and 5.5 hours. Demo mode is free and offline. Live mode sends each posting's text to TypeSafe.
 
 Nothing to host: the explainer is a static page on GitHub Pages and the kit runs locally; there is no browser playground because the Jev API rejects browser origins (a preflight from github.io answered 400 Disallowed CORS origin on 2026-10-18).
 
