@@ -152,7 +152,7 @@ Measured on the 80 synthetic postings with model jev-1.13.0 (rank run 2026-10-18
 | Share flagged at defaults | 25 of 80 (31 percent) FLAG, 0 REVIEW; all 25 are true refusals in the gold labels |
 | Cost of the whole run | $0.0026 |
 
-On a stratified n=40, claude sonnet via the claude CLI 2.1.286 tracks gold fit slightly better than Jev (Spearman
+On a stratified n=40, claude sonnet (claude-sonnet-5-5) via the claude CLI 2.1.286 tracks gold fit slightly better than Jev (Spearman
 0.764 versus 0.709) at about 20 times the latency and more than 100 times the cost. Details and the
 commands to reproduce are in [EVAL.md](EVAL.md).
 
@@ -162,7 +162,7 @@ commands to reproduce are in [EVAL.md](EVAL.md).
   the flag `ERROR`. A human reads the flags and the postings.
 - Numbers, all dated 2026-10-18 on model jev-1.13.0 and synthetic postings only: Spearman
   0.863 and top-10 overlap 6 of 10 against gold on n=80; fit Spearman 0.709 for Jev versus
-  0.764 for claude sonnet via the claude CLI 2.1.286 against gold on the stratified n=40; 25 of 80 postings (31
+  0.764 for claude sonnet (claude-sonnet-5-5) via the claude CLI 2.1.286 against gold on the stratified n=40; 25 of 80 postings (31
   percent) flagged at the defaults. They describe these fixtures, not your postings.
 - The thresholds were fit on synthetic postings and do not transfer. Real postings bury
   the sponsorship sentence, mix levels and use vaguer remote language. Refit on your own
