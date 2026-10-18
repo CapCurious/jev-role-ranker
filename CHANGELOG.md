@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased, 2026-10-18 (iteration 2 of the quality loop)
+
+- Input validation: a missing file, a non-UTF8 file, a malformed JSONL line or a record missing a field ends in one "error: <path>:<line>: <what>" line and exit 2, never a traceback.
+- Range checks: thresholds, costs, steps and limits outside their range end in one line naming the flag and the allowed range, exit 2.
+- Fail fast: 10 s HTTP timeout; after 3 consecutive failed calls the run stops with the last cause.
+- A posting whose URL fetch fails is an ERROR row carrying the cause, never scored as text; `--record` is checked writable before the first paid call and written via a temp file.
+- README: cost in short dated sentences, "no key, offline" on the demo line.
+
 ## Unreleased, 2026-10-18 (iteration 1 of the quality loop)
 
 - README cut from 1,620 to about 1,090 words: framed as rank plus flag, never reject; the hero shows the default `--demo rank` output in descending score; cost per 1,000 and 100,000 postings and a "nothing to host" line; a Limits bullet on live score drift of about 0.02 between identical runs; the Jev section is shared word for word with the sibling kits.

@@ -22,9 +22,11 @@ import datetime
 import html
 import html.parser
 import json
+import math
 import os
 import re
 import sys
+import tempfile
 import urllib.request
 
 import jev_client
@@ -154,38 +156,47 @@ def load_postings(source):
     if os.path.isdir(source):
         names = sorted(n for n in os.listdir(source) if n.endswith(".txt"))
         if not names:
-            raise SystemExit("no .txt files in {}".format(source))
+            raise jev_client.InputError("{}: folder has no .txt posting files".format(source))
         out = []
         for n in names:
-            with open(os.path.join(source, n), "r", encoding="utf-8") as fh:
-                out.append(parse_posting_text(n[:-4], fh.read()))
+            path = os.path.join(source, n)
+            raw = jev_client.read_text_utf8(path, "posting")
+            post = parse_posting_text(n[:-4], raw)
+            if not raw.strip():
+                post["fetch_error"] = "empty posting"
+            out.append(post)
         return out
     if os.path.isfile(source):
-        with open(source, "r", encoding="utf-8") as fh:
-            raw = fh.read()
+        raw = jev_client.read_text_utf8(source, "posting")
         lines = [ln.strip() for ln in raw.splitlines() if ln.strip()]
         if lines and all(re.match(r"^https?://", ln) for ln in lines):
             out = []
             for i, url in enumerate(lines, start=1):
+                error = None
                 try:
                     title, text = fetch_url(url)
-                except Exception as exc:  # a failed fetch still appears in the table
-                    title, text = "", "[fetch failed: {}]".format(type(exc).__name__)
-                out.append({"id": "u{:03d}".format(i), "title": title or url[:80],
-                            "company": "-", "text": text})
+                except Exception as exc:
+                    title, text = "", ""
+                    error = "{}: {}".format(type(exc).__name__, str(exc)[:80])
+                post = {"id": "u{:03d}".format(i), "title": title or url[:80],
+                        "company": "-", "text": text}
+                if not text:
+                    post["fetch_error"] = error or "empty posting"
+                out.append(post)
             return out
-        return [parse_posting_text(os.path.basename(source), raw)]
-    raise SystemExit("input not found: {}".format(source))
+        post = parse_posting_text(os.path.basename(source), raw)
+        if not raw.strip():
+            post["fetch_error"] = "empty posting"
+        return [post]
+    raise jev_client.InputError("{}: input not found".format(source))
 
 
 def load_profile(path):
     if path:
-        with open(path, "r", encoding="utf-8") as fh:
-            return fh.read().strip()
+        return jev_client.read_text_utf8(path, "profile").strip()
     local = os.path.join(HERE, "profile.txt")
     if os.path.isfile(local):
-        with open(local, "r", encoding="utf-8") as fh:
-            return fh.read().strip()
+        return jev_client.read_text_utf8(local, "profile").strip()
     return DEFAULT_PROFILE
 
 
@@ -199,11 +210,15 @@ def parse_weights(text):
         key, _, val = part.partition("=")
         key = key.strip()
         if key not in DEFAULT_WEIGHTS:
-            raise SystemExit("unknown weight {!r}; use {}".format(key, ",".join(DEFAULT_WEIGHTS)))
+            raise SystemExit("--weights: unknown name {!r}; use {}".format(
+                key, ",".join(DEFAULT_WEIGHTS)))
         try:
             weights[key] = float(val)
         except ValueError:
-            raise SystemExit("weight {} needs a number, got {!r}".format(key, val))
+            raise jev_client.InputError("--weights: {} needs a number, got {!r}".format(key, val))
+    if any(not math.isfinite(v) or v < 0 for v in weights.values()) or sum(weights.values()) <= 0:
+        raise jev_client.InputError(
+            "--weights: values must be finite, 0 or more, with a positive sum")
     return weights
 
 
@@ -244,17 +259,17 @@ def sponsorship_flag(p_no):
 
 
 def score_posting(client, profile, posting):
+    if posting.get("fetch_error"):
+        return {"answers": None, "usage": {},
+                "error": "fetch failed: " + posting["fetch_error"]}
     state = {"profile": profile, "posting": {"title": posting["title"], "text": posting["text"]}}
-    last = None
-    for _ in range(2):
-        try:
-            answers, usage = client.ask(state, QUESTIONS)
-            return {"answers": answers, "usage": usage, "error": None}
-        except jev_client.JevError as exc:
-            if exc.status in (401, 403) or isinstance(client, jev_client.RecordedClient):
-                raise
-            last = exc
-    return {"answers": None, "usage": {}, "error": str(last)}
+    try:
+        answers, usage = client.ask(state, QUESTIONS)
+        return {"answers": answers, "usage": usage, "error": None}
+    except jev_client.JevError as exc:
+        if exc.status in (401, 403) or isinstance(client, jev_client.RecordedClient):
+            raise
+        return {"answers": None, "usage": {}, "error": str(exc)}
 
 
 def build_rows(postings, results, weights):
@@ -375,9 +390,12 @@ class RecordingClient(object):
         doc = {"meta": {"model": self.model, "recorded": datetime.date.today().isoformat(),
                         "note": "synthetic postings; recorded by jev_role_ranker.py --record"},
                "records": self.records}
-        with open(self.path, "w", encoding="utf-8") as fh:
+        parent = os.path.dirname(os.path.abspath(self.path))
+        fd, temp_path = tempfile.mkstemp(prefix=".jev-record-", dir=parent, text=True)
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
             json.dump(doc, fh, indent=1, sort_keys=True)
             fh.write("\n")
+        os.replace(temp_path, self.path)
 
 
 # ---------------------------------------------------------------- cli
@@ -433,6 +451,10 @@ def run(args, out=None):
         else:
             raise SystemExit("give a folder of .txt files or a file of URLs")
     weights = parse_weights(args.weights)
+    if args.limit is not None and args.limit < 1:
+        raise jev_client.InputError("--limit: must be 1 or more")
+    if not (0.0 <= FLAG_AT <= 1.0 and 0.0 <= REVIEW_AT <= 1.0):
+        raise jev_client.InputError("thresholds: must be in the range 0 to 1")
     profile = load_profile(args.profile)
     postings = load_postings(source)
     try:
@@ -441,9 +463,27 @@ def run(args, out=None):
         print(str(exc), file=sys.stderr)
         return 2
     if args.record and not args.demo:
+        try:
+            with open(args.record, "a", encoding="utf-8"):
+                pass
+        except OSError as exc:
+            raise jev_client.InputError(
+                "--record: cannot write {}: {}".format(args.record, exc))
         client = RecordingClient(client, args.record, args.model)
     try:
-        results = [score_posting(client, profile, p) for p in postings]
+        results = []
+        consecutive_failures = 0
+        for posting in postings:
+            result = score_posting(client, profile, posting)
+            results.append(result)
+            if result["error"] and not posting.get("fetch_error"):
+                consecutive_failures += 1
+                if consecutive_failures == 3:
+                    print("error: 3 consecutive calls failed; last error: {}".format(
+                        result["error"]), file=sys.stderr)
+                    return 1
+            else:
+                consecutive_failures = 0
     except jev_client.JevError as exc:
         print("error: {}".format(exc), file=sys.stderr)
         return 2
@@ -460,26 +500,35 @@ def run(args, out=None):
         client.save()
     failed = sum(1 for r in rows if r["error"])
     if failed:
-        message = "{} posting(s) failed and are listed last with flag ERROR".format(failed)
-        if failed == len(rows):
-            message += ": {}".format(rows[0]["error"])
+        first_error = next(r["error"] for r in rows if r["error"])
+        message = ("{} of {} posting(s) failed and are listed last with flag ERROR; "
+                   "first error: {}. Check JEV_API_KEY and the network.").format(
+                       failed, len(rows), first_error)
         print(message, file=sys.stderr)
         if failed == len(rows):
             return 1
+        return 3
     return 0
 
 
 def main(argv=None):
     parser = build_parser()
     args = parser.parse_args(argv)
-    if not args.command:
-        if args.demo:
-            args.command = "rank"
-            args.input = None
-            return run(args)
-        parser.print_help()
-        return 0
-    return run(args)
+    try:
+        if not args.command:
+            if args.demo:
+                args.command = "rank"
+                args.input = None
+                return run(args)
+            parser.print_help()
+            return 0
+        return run(args)
+    except jev_client.InputError as exc:
+        print("error: {}".format(exc), file=sys.stderr)
+        return 2
+    except SystemExit as exc:
+        print("error: {}".format(exc), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

@@ -56,6 +56,25 @@ class JevError(RuntimeError):
         self.body = body
 
 
+class InputError(RuntimeError):
+    """A local input file could not be read or parsed."""
+
+
+def read_text_utf8(path, what="input"):
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            return fh.read()
+    except FileNotFoundError:
+        raise InputError("{}: {} not found".format(path, what))
+    except IsADirectoryError:
+        raise InputError("{}: expected a file for {}".format(path, what))
+    except UnicodeDecodeError as exc:
+        raise InputError("{}: {} is not UTF-8 text (bad byte at offset {}); save it as UTF-8".format(
+            path, what, exc.start))
+    except OSError as exc:
+        raise InputError("{}: cannot read {}: {}".format(path, what, exc))
+
+
 def get_key():
     for name in ("JEV_API_KEY", "TYPESAFE_API_KEY"):
         value = os.environ.get(name, "").strip()
@@ -118,7 +137,7 @@ class _Counters(object):
 
 
 class LiveClient(_Counters):
-    def __init__(self, model="jev-latest", timeout=30, key=None):
+    def __init__(self, model="jev-latest", timeout=10, key=None):
         _Counters.__init__(self)
         self.model = model
         self.timeout = timeout

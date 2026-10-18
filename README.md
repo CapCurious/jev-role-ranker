@@ -11,7 +11,7 @@ python3 jev_role_ranker.py --model jev-1.13.0 rank examples/postings --limit 10 
 ```
 ## Cost and hosting
 
-Cost, measured 2026-10-18 on jev-1.13.0 at the published $0.042 per million input tokens: one four-question call takes about 0.2 seconds and $0.00003, so 1,000 postings cost about $0.033 and 3.3 minutes serial on the fixture postings, about $0.088 on real postings at the 6,000-character cap; 100,000 cost about $3.30 to $8.80 and 5.5 hours. Demo mode is free and offline. Live mode sends each posting's text to TypeSafe.
+Cost, measured 2026-10-18 on jev-1.13.0 at the published $0.042 per million input tokens: one four-question call takes about 0.2 seconds and $0.00003. So 1,000 postings cost about $0.033 and 3.3 minutes serial on the fixture postings, about $0.088 on real postings at the 6,000-character cap. 100,000 cost about $3.30 to $8.80 and 5.5 hours. Demo mode is free and offline. Live mode sends each posting's text to TypeSafe.
 
 Nothing to host: the explainer is a static page on GitHub Pages and the kit runs locally; there is no browser playground because the Jev API rejects browser origins (a preflight from github.io answered 400 Disallowed CORS origin on 2026-10-18).
 
